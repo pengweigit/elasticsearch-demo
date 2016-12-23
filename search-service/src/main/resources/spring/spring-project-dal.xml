@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"  
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+	<!-- real conf file -->
+	<context:property-placeholder location="classpath*:conf/yifeng.project.properties" />
+<!-- 	<util:properties id="properties" location="classpath*:conf/yifeng.project.properties" /> -->
+
+	<bean class="com.talkyun.conf.spring.OpenxPlaceholderHandler"/>
+
+	<!-- orm -->
+	<bean id="project.DataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+<!-- 		<property name="url" value="${jdbc.url}" /> -->
+<!-- 		<property name="username" value="${jdbc.user}" /> -->
+<!-- 		<property name="password" value="${jdbc.password}" /> -->
+<!-- 		<property name="driverClassName" value="${jdbc.driver}" /> -->
+
+		<property name="url" value="$X{jdbc.url}" />
+		<property name="username" value="$X{jdbc.user}" />
+		<property name="password" value="$X{jdbc.password}" />
+		<property name="driverClassName" value="$X{jdbc.driver}" />
+
+		<!-- druid property -->
+		<property name="maxActive" value="20" />
+		<property name="initialSize" value="5" />
+		<property name="maxWait" value="60000" />
+		<property name="minIdle" value="1" />
+		<property name="timeBetweenEvictionRunsMillis" value="3000" />
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 'x' FROM DUAL" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+	</bean>
+
+	<bean id="project.SqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="project.DataSource" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath*:com/yifeng/kbs/dal/dao/*.xml</value>
+			</list>
+		</property>
+		<!-- mybatis OffsetLimitInterceptor -->
+        <property name="plugins">
+          <list>
+             <bean class="com.yifeng.search.plugin.OffsetLimitInterceptor">
+               <!-- properties inject -->
+               <property name="properties">
+                 <props>
+                   <prop key="com.mysql.jdbc.Driver DialectClass">com.yifeng.search.dialect.MySQLDialect</prop>
+                 </props>
+               </property>
+             </bean>
+          </list>
+        </property>
+	</bean>
+
+	<bean id="project.TransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="project.DataSource" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="project.TransactionManager" />
+	
+	
+	<bean id="project.config" class="com.yifeng.search.common.PropertiesConfigHandler">
+<!-- 		<property name="KBS_OPENX_URL" value="${kbs.openx.url}" /> -->
+<!-- 		<property name="OSS_OPENX_URL" value="${oss.openx.url}" /> -->
+<!-- 		<property name="PT_SECURITY_OPENX_URL" value="${pt.security.openx.url}" /> -->
+<!-- 		<property name="KBS_FAQ_SOLR_URL" value="${kbs.faq.solr.url}" /> -->
+<!-- 		<property name="KBS_GOODS_SOLR_URL" value="${kbs.goods.solr.url}" /> -->
+<!-- 		<property name="KBS_DISEASE_GOODS_SOLR_URL" value="${kbs.disease.goods.solr.url}" /> -->
+<!-- 		<property name="ZT_GOODS_OPENX_URL" value="${zt.goods.openx.url}" /> -->
+<!-- 		<property name="BI_MEMBER_EVER_BUY_URL" value="${bi.member.ever.buy.url}" /> -->
+<!-- 		<property name="GOODS_SORT_SALESVOLUME" value="${goods.sort.salesVolume}" /> -->
+<!-- 		<property name="GOODS_SORT_GROSSPROFIT" value="${goods.sort.grossProfit}" /> -->
+<!-- 		<property name="GOODS_SORT_TOTALGROSSPROFIT" value="${goods.sort.totalGrossProfit}" /> -->
+		
+		<property name="KBS_OPENX_URL" value="$X{kbs.openx.url}" />
+		<property name="OSS_OPENX_URL" value="$X{oss.openx.url}" />
+		<property name="PT_SECURITY_OPENX_URL" value="$X{pt.security.openx.url}" />
+		<property name="KBS_FAQ_SOLR_URL" value="$X{kbs.faq.solr.url}" />
+		<property name="KBS_GOODS_SOLR_URL" value="$X{kbs.goods.solr.url}" />
+		<property name="KBS_EXTEND_GOODS_SOLR_URL" value="$X{kbs.extend.goods.solr.url}" />
+		<property name="KBS_DISEASE_GOODS_SOLR_URL" value="$X{kbs.disease.goods.solr.url}" />
+		<property name="ZT_GOODS_OPENX_URL" value="$X{zt.goods.openx.url}" />
+		<property name="BI_MEMBER_EVER_BUY_URL" value="$X{bi.member.ever.buy.url}" />
+		<property name="GOODS_SORT_SALESVOLUME" value="$X{goods.sort.salesVolume}" />
+		<property name="GOODS_SORT_GROSSPROFIT" value="$X{goods.sort.grossProfit}" />
+		<property name="GOODS_SORT_TOTALGROSSPROFIT" value="$X{goods.sort.totalGrossProfit}" />
+		
+		<!-- 中台商品连接池配置 -->
+		<property name="ZT_GOODS_POOL_HOST" value="$X{zt.goods.pool.host}" />
+		<property name="ZT_GOODS_POOL_PORT" value="$X{zt.goods.pool.port}" />
+		<property name="ZT_GOODS_POOL_SCHEMA" value="$X{zt.goods.pool.schema}" />
+		<property name="ZT_GOODS_POOL_USER" value="$X{zt.goods.pool.user}" />
+		<property name="ZT_GOODS_POOL_PASSWORD" value="$X{zt.goods.pool.password}" />
+		
+		<property name="ZT_GOODS_POOL_MAX_ACTIVE" value="$X{zt.goods.pool.maxActive}" />
+		<property name="ZT_GOODS_POOL_MAX_IDLE" value="$X{zt.goods.pool.maxIdle}" />
+		<property name="ZT_GOODS_POOL_MIN_IDLE" value="$X{zt.goods.pool.minIdle}" />
+		<property name="ZT_GOODS_POOL_MAX_WAIT" value="$X{zt.goods.pool.maxWait}" />
+		<property name="ZT_GOODS_POOL_TEST_ON_BORROW" value="$X{zt.goods.pool.testOnBorrow}" />
+		<property name="ZT_GOODS_POOL_TEST_ON_RETURN" value="$X{zt.goods.pool.testOnReturn}" />
+		<property name="ZT_GOODS_POOL_TEST_WHILE_IDLE" value="$X{zt.goods.pool.testWhileIdle}" />
+		<property name="ZT_GOODS_POOL_TIME_BETWEEN_EVICTION_RUNS_MILLIS" value="$X{zt.goods.pool.timeBetweenEvictionRunsMillis}" />
+		<property name="ZT_GOODS_POOL_MIN_EVICTABLE_IDLE_TIME_MILLIS" value="$X{zt.goods.pool.minEvictableIdleTimeMillis}" />
+		
+		<!-- 商品图片OSS前缀 -->
+		<!-- <property name="ZT_GOODS_IMG_OSS_PREFIX" value="$X{zt.goods.img.oss.prefix}" /> -->
+		<property name="ZT_GOODS_IMG_OSS_PREFIX" value="http://yf-base.img-cn-shenzhen.aliyuncs.com/product" />
+		
+	</bean>
+</beans>

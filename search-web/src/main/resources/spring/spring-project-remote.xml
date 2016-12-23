@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="openx.AbstractInterceptor" abstract="true"
+          class="com.talkyun.openx.server.core.AbstractInterceptor">
+        <property name="matchPattern">
+            <list>
+                <value>*.*</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="openx.RestfulExporter" class="com.talkyun.openx.RestfulExporter"
+          abstract="true" init-method="export">
+        <property name="interceptor">
+            <list>
+                <bean class="com.talkyun.openx.interceptor.LoggingInterceptor" parent="openx.AbstractInterceptor"/>
+                <bean class="com.talkyun.openx.interceptor.PerformanceInterceptor" parent="openx.AbstractInterceptor">
+                    <property name="threshold" value="9999"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- job的配置-->
+    <!-- <bean id="dataJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">   -->
+        <!-- 指定任务实体 --> 
+        <!-- <property name="targetObject" ref="searchService"/> --> 
+        <!-- 指定任务入口方法 --> 
+        <!-- <property name="targetMethod" value="incrementIndex"/> -->  
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+        <!-- <property name="concurrent" value="false"/>
+   </bean>  --> 
+   <!-- 调度的配置 -->
+	<!-- <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="dataJobDetail"/>  
+       <property name="cronExpression" value="0 0 3 * * ?"/> --><!-- 每天凌晨3点执行 -->
+       <!-- 容器启动时不立即执行 -->
+       <!-- <property name="misfireInstruction" value="2"></property>
+    </bean> -->
+<!-- 每隔5秒执行一次：*/5 * * * * ? -->
+<!-- 每隔1分钟执行一次：0 */1 * * * ? -->
+<!-- 每天23点执行一次：0 0 23 * * ? -->
+<!-- 每天凌晨1点执行一次：0 0 1 * * ? -->
+<!-- 每月1号凌晨1点执行一次：0 0 1 1 * ? -->
+<!-- 每月最后一天23点执行一次：0 0 23 L * ? -->
+<!-- 每周星期天凌晨1点实行一次：0 0 1 ? * L -->
+<!-- 在26分、29分、33分执行一次：0 26,29,33 * * * ? -->
+<!-- 每天的0点、13点、18点、21点都执行一次：0 0 0,13,18,21 * * ? -->
+    <!-- <bean id="dataJobDetail_" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="searchService"/> 
+        <property name="targetMethod" value="fullDoseIndex"/>  
+        <property name="concurrent" value="false"/>
+   </bean>  
+	<bean id="cronTrigger_" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="dataJobDetail_"/>  
+       <property name="cronExpression" value="0 0 1 1 * ?"/>每月1号凌晨1点执行
+       <property name="misfireInstruction" value="2"></property>
+    </bean> -->
+    <!-- 扩展接口每天凌晨3点执行 -->
+    <bean id="dailyJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="searchService"/> 
+        <property name="targetMethod" value="fullDoseIndex"/>  
+        <property name="concurrent" value="false"/>
+   </bean>  
+	<bean id="dailyTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="dailyJobDetail"/>  
+       <property name="cronExpression" value="$X{kbs.solr.goods.task.cron}"/><!-- 每天凌晨3点执行 -->
+       <property name="misfireInstruction" value="2"></property>
+    </bean>
+    
+    <!-- 扩展接口每天凌晨2点执行 -->
+    <bean id="dailyJobDetailEx" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <property name="targetObject" ref="searchService"/> 
+        <property name="targetMethod" value="fullDoseIndexEx"/>  
+        <property name="concurrent" value="false"/>
+   </bean>  
+	<bean id="dailyTriggerEx" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+       <property name="jobDetail" ref="dailyJobDetailEx"/>  
+       <property name="cronExpression" value="$X{kbs.solr.extend.goods.task.cron}"/><!-- 每天凌晨2点执行 -->
+       <property name="misfireInstruction" value="2"></property>
+    </bean>
+    
+	<!-- 启动触发器的配置 -->
+   <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+       <property name="triggers">  
+        <!-- 每个Trigger表示一个作业。 -->
+           <list>  
+               <!-- <ref bean="cronTrigger"/> --> <!-- 每日增量 -->
+               <!-- <ref bean="cronTrigger_"/> --> <!-- 每月全量 -->
+               <ref bean="dailyTrigger"/> <!-- 每日全量 -->
+               <ref bean="dailyTriggerEx"/> <!-- 每日全量 -->
+           </list>  
+       </property>  
+       <property name="autoStartup" value="$X{kbs.solr.task.autostartup}"/>  
+    </bean>  
+    
+    
+
+    <!-- remote service -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/project/ProjectService"/>
+        <property name="target" ref="projectService"/>
+    </bean>
+    
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/o2o/o2oService"/>
+        <property name="target" ref="o2oService"/>
+    </bean>
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/o2o/o2oSecondService"/>
+        <property name="target" ref="o2oSecondService"/>
+    </bean>
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/pass/passService"/>
+        <property name="target" ref="passService"/>
+    </bean>
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/o2o/searchService"/>
+        <property name="target" ref="searchService"/>
+    </bean>
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/kbs/infoService"/>
+        <property name="target" ref="kbs.infoService"/>
+    </bean>
+</beans>

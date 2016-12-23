@@ -1,0 +1,35 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>OpenX WebApp</title>
+    <!-- jquery and openx -->
+    <script type="text/javascript" src="js/jquery-2.1.0/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="js/openx-1.0.0/openx.utils-1.0.0.js"></script>
+    <script type="text/javascript" src="js/openx-1.0.0/openx-1.0.0.js"></script>
+
+    <script type="text/javascript">
+        $X().conf({url: '/openx', type: 'app'});
+
+        function doEcho() {
+            $('#out').val('loading ...');
+
+            var html = $('#in').val();
+            $X('/openx/Echo', 'helloByString').callx({
+                user: html,
+                onResult: function (data) {
+                    $('#out').val(data);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+<textarea id="in" style="width: 100%; height: 600px"><input value="echo"/></textarea>
+<br/>
+<input type="button" value="Do Echo ..." onclick="doEcho();"/>
+<br/><br/>
+<textarea id="out" style="width: 100%; "></textarea>
+</body>
+</html>

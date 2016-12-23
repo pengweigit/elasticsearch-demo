@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>益丰KBS后台管理系统| 登陆</title>
+
+    <link href="staticSource/css/bootstrap.min.css" rel="stylesheet">
+    <link href="staticSource/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <link href="staticSource/css/animate.css" rel="stylesheet">
+    <link href="staticSource/css/style.css" rel="stylesheet">
+    <!-- <link href="staticSource/css/plugins/toastr/toastr.min.css" rel="stylesheet"> -->
+    <link href="staticSource/css/plugins/sweetalert/sweetalert.css" rel="stylesheet" >
+    
+    <style>
+        #toast-container {
+            top: 0;
+            position: fixed;
+            z-index: 999999
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen  animated fadeInDown">
+    <div>
+        <div>
+
+            <h1 class="logo-name">Y F</h1>
+
+        </div>
+        <h3>欢迎来到益丰后台管理系统</h3>
+
+
+        <form class="m-t" role="form">
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="用户名" required="" name="userName">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="密码" required="" name="passWord">
+            </div>
+            <button type="button" class="btn btn-primary block full-width m-b" onclick="login()">登陆</button>
+        </form>
+        <div>
+            <a href="javascript:;" onclick="$('#register-modal-form').modal({'backdrop': 'static'})">注册</a>
+        </div>
+
+        <p class="m-t">
+            <small>湖南益丰医药有限公司 &copy; 2016</small>
+        </p>
+    </div>
+</div>
+
+<div id="register-modal-form" class="modal fade" aria-hidden="true" style="display: none;">
+    <div class="modal-backdrop fade in"></div>
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInTop">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 ">
+                        <h3 class="m-t-none m-b">用户注册</h3>
+
+                        <form role="form">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button disabled="disabled" tabindex="-1"
+                                                class="btn btn-white" style="color: black"
+                                                type="button">用户名
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" name="register_userName">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button disabled="disabled" tabindex="-1"
+                                                class="btn btn-white" style="color: black"
+                                                type="button">密码
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" name="register_passWord">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button disabled="disabled" tabindex="-1"
+                                                class="btn btn-white" style="color: black"
+                                                type="button">性别
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" name="register_sex">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button disabled="disabled" tabindex="-1"
+                                                class="btn btn-white" style="color: black"
+                                                type="button">邮箱
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" name="register_email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-btn">
+                                        <button disabled="disabled" tabindex="-1"
+                                                class="btn btn-white" style="color: black"
+                                                type="button">年龄
+                                        </button>
+                                    </div>
+                                    <input type="text" class="form-control" name="register_age">
+                                </div>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-white pull-right m-t-n-xs" type="button"
+                                        data-dismiss="modal">
+                                    <strong>取消</strong>
+                                </button>
+                                <button class="btn btn-sm btn-primary pull-right m-t-n-xs" type="button"
+                                        onclick="register();" data-dismiss="modal">
+                                    <strong>确定</strong>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="staticSource/js/jquery-2.1.1.js"></script>
+<script src="staticSource/js/bootstrap.min.js"></script>
+<script src="staticSource/js/plugins/toastr/toastr.min.js"></script>
+<script src="staticSource/js/plugins/sweetalert/sweetalert.js"></script>
+
+<!-- openx -->
+<script type="text/javascript" src="js/openx-1.0.0/openx.utils-1.0.0.js"></script>
+<script type="text/javascript" src="js/openx-1.0.0/openx-1.0.0.js"></script>
+
+<script type="text/javascript">
+        var toastr = {
+            success: function (msg, fn) {
+                swal({
+                    title: msg,
+                    type: "success"
+                }, fn);
+            },
+            error: function (msg) {
+                swal(msg, "", "error");
+            },
+            info: function (msg) {
+                swal(msg);
+            }
+        };
+</script>
+<script>
+    $X().conf({url: '/openx', type: 'app'});
+	
+    function afterLogin(userName) {
+    	localStorage.setItem("userName", userName);
+        window.location.href = "/sys/role/roleIndex1.html";
+    }
+    
+    function login() {
+        var userName = $("input[name=userName]").val().trim();
+        var passWord = $("input[name=passWord]").val().trim();
+
+        if (!userName || !passWord) {
+            console.log("userName or passWord is null");
+            toastr.error("用户名或密码为空！")
+            return;
+        }
+
+        var user = {
+            "userName": userName,
+            "passWord": passWord
+        };
+
+        $X('/example/UserService', 'selectUserByUserNameAndPasswords').callx({
+            user: user,
+            onResult: function (data) {
+            	console.log(data);
+                if (data) {
+                	afterLogin(data.userName);
+                } else {
+                	toastr.error("账号或者密码不正确，登陆失败！");
+                }
+            },
+            onError : function(error) {
+            	// do something
+            }
+        });
+    }
+
+    function register() {
+        var userName = $("input[name=register_userName]").val();
+        var passWord = $("input[name=register_passWord]").val();
+        var sex = $("input[name=register_sex]").val();
+        var email = $("input[name=register_email]").val();
+        var age = $("input[name=register_age]").val();
+
+        if (!userName || !passWord || !sex || !email || !age) {
+            return;
+        }
+
+        var user = {
+            "userName": userName,
+            "passWord": passWord,
+            "sex": sex,
+            "email": email,
+            "age": age
+        };
+
+        $X('/example/UserService', 'create').callx({
+            user: user,
+            onResult: function (data) {
+                if (data) {
+                	toastr.success("注册成功!", afterLogin(data.userName));
+                } else {
+                	toastr.error("注册失败!");
+                }
+            }
+        });
+    }
+
+</script>
+
+</body>
+
+</html>

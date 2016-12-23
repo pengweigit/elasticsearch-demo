@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+<!--         <plugin type="tk.mybatis.mapper.generator.MapperPlugin"> -->
+<!--             <property name="mappers" value="tk.mybatis.mapper.common.Mapper"/> -->
+<!--         </plugin> -->
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.230.54:3306/yfdyf"
+                        userId="root"
+                        password="rootoor">
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.yifeng.search.dal.entity"
+                            targetProject="src/main/java/"/>
+
+        <sqlMapGenerator targetPackage="com.yifeng.search.dal.dao"
+                         targetProject="src/main/java"/>
+
+        <javaClientGenerator targetPackage="com.yifeng.search.dal.dao"
+                             targetProject="src/main/java/"
+                             type="XMLMAPPER"/>
+
+<!--         <table tableName="zt_kbs_info" domainObjectName="InfoEntity"  enableCountByExample="false" enableUpdateByExample="false" -->
+<!--                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+<!--         <table tableName="zt_kbs_info_label" domainObjectName="InfoLabelEntity"  enableCountByExample="false" enableUpdateByExample="false" -->
+<!--                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table> -->
+    </context>
+</generatorConfiguration>

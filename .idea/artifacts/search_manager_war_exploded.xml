@@ -1,0 +1,36 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="search-manager:war exploded">
+    <output-path>$PROJECT_DIR$/search-manager/target/search-manager-1.0.0-SNAPSHOT</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="search-manager" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="archive" name="search-service-1.0.0-SNAPSHOT.jar">
+            <element id="module-output" name="search-service" />
+          </element>
+          <element id="archive" name="search-api-1.0.0-SNAPSHOT.jar">
+            <element id="module-output" name="search-api" />
+          </element>
+          <element id="archive" name="search-dal-1.0.0-SNAPSHOT.jar">
+            <element id="module-output" name="search-dal" />
+          </element>
+          <element id="library" level="project" name="Maven: com.yifeng.zt:pt-security-sdk:1.0.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: com.yifeng.zt:pt-security-api:1.0.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: commons-collections:commons-collections:3.2.1" />
+          <element id="library" level="project" name="Maven: com.talkyun.zeus:openx-client:2.1.2" />
+          <element id="library" level="project" name="Maven: com.talkyun.zeus:openx-server:2.1.2" />
+          <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.22" />
+          <element id="library" level="project" name="Maven: com.yifeng.zt:zt-goods-sdk:1.0.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: com.yifeng.zt:zt-goods-api:1.0.0-SNAPSHOT" />
+          <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.22" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/search-manager/target/search-manager-1.0.0-SNAPSHOT/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="javaee-facet-resources" facet="search-manager/web/Web" />
+    </root>
+  </artifact>
+</component>

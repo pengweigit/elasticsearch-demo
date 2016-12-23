@@ -1,0 +1,43 @@
+@CHARSET "UTF-8";
+body{
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.yf-nm-head{
+	margin: 0px 10px 15px 10px;
+	/* background: rgba(26, 179, 148, 0.26); */
+	border-radius: 3px;
+	padding: 20px 20px;
+	border: 1px solid #ddd;
+}
+
+.yf-nm-head a{
+	text-decoration: none;
+}
+
+.yf-nm-head a.btn{
+	margin: 0 15px;
+}
+.yf-nm-head label{
+	float: left;
+    margin-top: 9px;
+    min-width: 70px;
+}
+.yf-nm-head label.units{
+	margin-top: 5px;margin-left: -10px;
+}
+
+.yf-nm-head .form-inline{
+	margin: 25px 0;
+	padding: 27px 25px;
+}
+
+.yf-nm-head button{
+	margin: 0 7px;
+}
+
+.yf-nm-body{
+	margin: 10px 10px;
+    border-radius: 3px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}

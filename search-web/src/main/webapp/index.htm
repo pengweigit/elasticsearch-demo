@@ -1,0 +1,36 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>OpenX WebApp</title>
+    <!-- jquery and openx -->
+    <script type="text/javascript" src="js/jquery-2.1.0/jquery-2.1.0.js"></script>
+    <script type="text/javascript" src="js/openx-1.0.0/openx.utils-1.0.0.js"></script>
+    <script type="text/javascript" src="js/openx-1.0.0/openx-1.0.0.js"></script>
+
+    <script type="text/javascript">
+        $X().conf({url: '/openx', type: 'app'});
+
+        function doCall() {
+            $('#out').val('loading ...');
+
+            var text = $('#in').val();
+            $X('/project/ProjectService', 'sayHello').callx({
+                name: text,
+                onResult: function (data) {
+                    console.log(data);
+                    $('#out').val(data);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+<textarea id="in" style="width: 100%; height: 300px">zhumeng</textarea>
+<br/><br/>
+<input type="button" value="Do Call ..." onclick="doCall();"/>
+<br/><br/>
+<textarea id="out" style="width: 100%; height: 300px">waiting for call ...</textarea>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <bean id="openx.AbstractInterceptor" abstract="true"
+          class="com.talkyun.openx.server.core.AbstractInterceptor">
+        <property name="matchPattern">
+            <list>
+                <value>/kbs/*.*</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="openx.RestfulExporter" class="com.talkyun.openx.RestfulExporter"
+          abstract="true" init-method="export">
+        <property name="interceptor">
+            <list>
+                <bean class="com.talkyun.openx.interceptor.LoggingInterceptor" parent="openx.AbstractInterceptor"/>
+                <bean class="com.talkyun.openx.interceptor.PerformanceInterceptor" parent="openx.AbstractInterceptor">
+                    <property name="threshold" value="999"/>
+                </bean>
+                <bean class="com.yifeng.search.web.filter.TokenInterceptor" parent="openx.AbstractInterceptor" />
+            </list>
+        </property>
+    </bean>
+
+    <!-- remote service -->
+<!--     <bean parent="openx.RestfulExporter"> -->
+<!--         <property name="mapping" value="/project/ProjectService"/> -->
+<!--         <property name="target" ref="projectService"/> -->
+<!--     </bean> -->
+    
+<!--     <bean parent="openx.RestfulExporter"> -->
+<!--         <property name="mapping" value="/o2o/o2oService"/> -->
+<!--         <property name="target" ref="o2oService"/> -->
+<!--     </bean> -->
+<!--     <bean parent="openx.RestfulExporter"> -->
+<!--         <property name="mapping" value="/pass/passService"/> -->
+<!--         <property name="target" ref="passService"/> -->
+<!--     </bean> -->
+    
+    <!-- 商品组合相关服务 -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/kbs/sellGroupService"/>
+        <property name="target" ref="kbs.sellGroupService"/>
+    </bean>
+    
+    <!-- 中台商品查询服务 -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/kbs/ztGoddsService"/>
+        <property name="target" ref="kbs.ztGoddsService"/>
+    </bean>
+    
+     <!-- 登录服务 -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/login/loginService"/>
+        <property name="target" ref="kbs.loginService"/>
+    </bean>
+
+    <!-- 文件上传服务 -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/kbs/uploadFileService"/>
+        <property name="target" ref="kbs.uploadFileService"/>
+    </bean>
+    
+    <!-- 专区设置相关服务 -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/kbs/prefectureService"/>
+        <property name="target" ref="kbs.prefectureService"/>
+    </bean>
+    
+    <!-- 资讯管理相关服务 -->
+    <bean parent="openx.RestfulExporter">
+        <property name="mapping" value="/kbs/infoService"/>
+        <property name="target" ref="kbs.infoService"/>
+    </bean>
+</beans>
